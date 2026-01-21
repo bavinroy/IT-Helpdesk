@@ -1,0 +1,7 @@
+{
+  "name": "AI-Powered IT Helpdesk",
+  "description": "A production-ready IT ticketing system featuring an NLP chatbot, ML-driven ticket categorization, and automated priority prediction.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
