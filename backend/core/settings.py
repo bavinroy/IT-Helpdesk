@@ -24,9 +24,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     # Local
-    'users',
+    'users.apps.UsersConfig',
     'tickets.apps.TicketsConfig',
-    'chatbot',
+    'chatbot.apps.ChatbotConfig',
 ]
 
 MIDDLEWARE = [
@@ -46,7 +46,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR.parent / 'dist'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,6 +107,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [
+    BASE_DIR.parent / 'dist',
+]
+# WhiteNoise to serve frontend index.html correctly
+WHITENOISE_INDEX_FILE = True
 
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'

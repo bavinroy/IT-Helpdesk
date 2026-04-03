@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 import { User } from '../types';
 
-// Mock User type removed, imported from types instead
+import { API_BASE } from '../config';
 
 interface AuthContextType {
     user: User | null;
@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
     };
 
-    const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
 
     const signup = async (name: string, email: string, pass: string): Promise<boolean> => {
         try {

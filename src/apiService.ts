@@ -1,7 +1,4 @@
-
-// Dynamically determine the API URL based on the current window location
-// This ensures that if the user visits via 192.168.x.x, the API calls go to 192.168.x.x:8000
-const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
+import { API_BASE } from './config';
 
 // Update signature to accept object
 export const draftReplyFromAI = async (ticket: { id?: string, title: string, description: string, history?: string }): Promise<string> => {
