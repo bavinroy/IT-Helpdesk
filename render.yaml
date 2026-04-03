@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: it-helpdesk-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python manage.py migrate
+    startCommand: gunicorn core.wsgi --log-file -
+    rootDir: backend
+    envVars:
+      - key: DATABASE_URL
+        sync: false # Set this to your Neon database URL in the Render dashboard
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false # Set this to your Vercel frontend URL

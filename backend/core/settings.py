@@ -67,12 +67,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # if strictly defined, otherwise fallback to sqlite
 import dj_database_url
 
+# Database configuration
+db_url = os.environ.get('DATABASE_URL')
+if db_url:
+    # Cleanup: remove potential literal quotes or spaces from environment variable
+    db_url = db_url.strip().strip('"').strip("'")
+
 DATABASES = {
     'default': dj_database_url.config(
         default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
-        conn_max_age=600
+        conn_max_age=600,
+        env='DATABASE_URL_CLEAN' if db_url else 'DATABASE_URL'
     )
 }
+
+if db_url:
+    # Update with cleaned URL
+    DATABASES['default'] = dj_database_url.parse(db_url, conn_max_age=600)
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -113,7 +124,15 @@ REST_FRAMEWORK = {
 # CORS  Configuration
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',')
+# Split and clean up origins, ensuring each has a scheme (http/https)
+raw_origins = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',')
+CORS_ALLOWED_ORIGINS = []
+for origin in raw_origins:
+    clean_origin = origin.strip()
+    if clean_origin:
+        if not clean_origin.startswith(('http://', 'https://')):
+            clean_origin = f'https://{clean_origin}'
+        CORS_ALLOWED_ORIGINS.append(clean_origin)
 
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
